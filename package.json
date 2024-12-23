@@ -1,30 +1,30 @@
 {
-  "name": "minecraft-manager",
-  "version": "1.0.0",
-  "description": "A Discord bot for managing Minecraft Servers",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "www.github.com/asteroidsgithub/minecraft-manager"
-  },
-  "keywords": [
-    "Minecraft",
-    "Discord",
-    "Bots"
-  ],
-  "author": "Jonathan Voss",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^14.16.3",
-    "dotenv": "^16.4.7",
-    "prisma": "^6.1.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
-  }
+    "name": "minecraft-manager",
+    "version": "1.0.0",
+    "description": "A Discord bot for managing Minecraft Servers",
+    "main": "index.ts",
+    "scripts": {
+        "launch": "nodemon --exec ts-node index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "www.github.com/asteroidsgithub/minecraft-manager"
+    },
+    "keywords": [
+        "Minecraft",
+        "Discord",
+        "Bots"
+    ],
+    "author": "Jonathan Voss",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^14.16.3",
+        "dotenv": "^16.4.7",
+        "prisma": "^6.1.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2"
+    }
 }
