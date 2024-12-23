@@ -17,8 +17,8 @@
         "prod": "npm run build && npm run start"
     },
     "dependencies": {
-        "@discordjs/rest": "^2.0.1",
-        "discord.js": "^14.13.0",
+        "@discordjs/rest": "^2.4.0",
+        "discord.js": "^14.16.3",
         "dotenv": "^16.3.1"
     },
     "devDependencies": {
