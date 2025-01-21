@@ -7,49 +7,32 @@ import ApplicationCommand from '../templates/ApplicationCommand.js'
 
 export default new ApplicationCommand({
     data: new SlashCommandBuilder()
-        .setName('subautocompletetest')
-        .setDescription('A test for autocomplete subcommands')
-        .addSubcommandGroup(
-            new SlashCommandSubcommandGroupBuilder()
-                .setName('autocompletegroup')
-                .setDescription('A test for autocomplete subcommand groups')
-                .addSubcommand(
-                    new SlashCommandSubcommandBuilder()
-                        .setName('guidesub')
-                        .setDescription('Search a guide!')
-                        .addStringOption((option) =>
-                            option
-                                .setName('query')
-                                .setDescription('Phrase to search for')
-                                .setAutocomplete(true)
-                                .setRequired(true)
-                        )
-                        .addStringOption((option) =>
-                            option
-                                .setName('version')
-                                .setDescription('Version to search in')
-                                .setAutocomplete(true)
-                                .setRequired(true)
-                        )
+        .setName('ticket')
+        .setDescription('Ticket commands')
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName('open')
+                .setDescription('Opens a New Ticket')
+                .addStringOption((option) =>
+                    option
+                        .setName('category')
+                        .setDescription('What your ticket is about')
+                        .setAutocomplete(true)
+                        .setRequired(true)
                 )
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
-                .setName('guide')
-                .setDescription('Search a guide!')
+                .setName('close')
+                .setDescription('Closes a Ticket')
                 .addStringOption((option) =>
                     option
-                        .setName('query')
-                        .setDescription('Phrase to search for')
+                        .setName('ticket_id')
+                        .setDescription(
+                            'The ID of the ticket you want to close'
+                        )
+                        .setRequired(false)
                         .setAutocomplete(true)
-                        .setRequired(true)
-                )
-                .addStringOption((option) =>
-                    option
-                        .setName('version')
-                        .setDescription('Version to search in')
-                        .setAutocomplete(true)
-                        .setRequired(true)
                 )
         ),
     hasSubCommands: true
