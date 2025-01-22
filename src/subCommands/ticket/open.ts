@@ -61,7 +61,7 @@ export default new SubCommand({
         })
 
         // Create a ticket in the database
-        const ticket = await database.ticket.create({
+        let ticket = await database.ticket.create({
             data: {
                 guildId: interaction.guild.id,
                 guildMemberDiscordId: interaction.user.id,
@@ -79,5 +79,7 @@ export default new SubCommand({
         await channel.send(
             `Ticket has been created by <@${interaction.user.id}>.`
         )
+
+        client.currentTickets.set(channel.id, ticket)
     }
 })

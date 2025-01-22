@@ -22,10 +22,10 @@ export default async function deployGlobalCommands() {
 
     try {
         console.log('Started refreshing application (/) commands.')
-
-        await rest.put(Routes.applicationCommands(CLIENT_ID as string), {
-            body: []
-        })
+        
+        // await rest.put(Routes.applicationCommands(CLIENT_ID as string), {
+        //     body: []
+        // })
 
         await rest.put(Routes.applicationCommands(CLIENT_ID as string), {
             body: commands

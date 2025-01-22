@@ -1,6 +1,7 @@
-import { BaseInteraction, Events } from 'discord.js'
+import { BaseInteraction, Colors, EmbedBuilder, Events } from 'discord.js'
 import type ApplicationCommand from '../templates/ApplicationCommand.js'
 import Event from '../templates/Event.js'
+import checkForServerOptions from '../utilities/setupChecks.js'
 
 export default new Event({
     name: Events.InteractionCreate,
@@ -24,11 +25,33 @@ export default new Event({
                     return
                 }
 
+                let guildId = interaction.guildId ?? ''
+                let hasServerOptions = await checkForServerOptions(guildId)
+
+                if (!hasServerOptions && command.data.name !== 'setup') {
+                    await interaction.reply({
+                        content:
+                            'This server has not been set up correctly, please contact an administrator to run the /setup command',
+                        ephemeral: true
+                    })
+                    return
+                }
+
                 await command.execute(interaction)
             } catch (error) {
-                console.error(error)
+                // console.error(error)
                 await interaction.reply({
-                    content: 'There was an error while executing this command!',
+                    embeds: [
+                        new EmbedBuilder()
+                            .setTitle(
+                                'There was an error while executing this command!'
+                            )
+                            .setDescription(
+                                (error as Error).message ??
+                                    "I couldn't execute that command!"
+                            )
+                            .setColor(Colors.Red)
+                    ],
                     ephemeral: true
                 })
             }

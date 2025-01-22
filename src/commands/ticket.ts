@@ -21,19 +21,12 @@ export default new ApplicationCommand({
                         .setRequired(true)
                 )
         )
+
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName('close')
                 .setDescription('Closes a Ticket')
-                .addStringOption((option) =>
-                    option
-                        .setName('ticket_id')
-                        .setDescription(
-                            'The ID of the ticket you want to close'
-                        )
-                        .setRequired(false)
-                        .setAutocomplete(true)
-                )
-        ),
+        )
+        .setDMPermission(false),
     hasSubCommands: true
 })

@@ -3,14 +3,14 @@ import 'dotenv/config'
 
 import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js'
 import { readdirSync } from 'fs'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Ticket } from '@prisma/client'
 import type ApplicationCommand from './templates/ApplicationCommand.js'
 import type Event from './templates/Event.js'
 import type MessageCommand from './templates/MessageCommand.js'
 import deployGlobalCommands from './deployGlobalCommands.js'
 const { TOKEN } = process.env
 
-// deployGlobalCommands()
+// await deployGlobalCommands()
 
 // Discord client object
 global.client = Object.assign(
@@ -25,7 +25,8 @@ global.client = Object.assign(
     }),
     {
         commands: new Collection<string, ApplicationCommand>(),
-        msgCommands: new Collection<string, MessageCommand>()
+        msgCommands: new Collection<string, MessageCommand>(),
+        currentTickets: new Collection<string, Ticket>()
     }
 )
 
@@ -53,6 +54,15 @@ for (const file of eventFiles) {
     } else {
         client.on(event.name, (...args) => event.execute(...args))
     }
+}
+
+// Load any open tickets into the client.openTickets collection
+const openTickets = await database.ticket.findMany({
+    where: { status: 'OPEN' }
+})
+
+for (const ticket of openTickets) {
+    client.currentTickets.set(ticket.channelId, ticket)
 }
 
 await client.login(TOKEN)

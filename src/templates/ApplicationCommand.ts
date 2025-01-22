@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type {
-    AutocompleteInteraction,
-    ChatInputCommandInteraction,
-    ContextMenuCommandBuilder,
-    SlashCommandBuilder,
-    SlashCommandSubcommandsOnlyBuilder
+import {
+    Colors,
+    EmbedBuilder,
+    type AutocompleteInteraction,
+    type ChatInputCommandInteraction,
+    type ContextMenuCommandBuilder,
+    type PermissionsBitField,
+    type SlashCommandBuilder,
+    type SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js'
 import type SubCommand from './SubCommand.js'
+import checkForServerOptions from '../utilities/setupChecks.js'
 
 /**
  * Represents an Application Command
@@ -62,12 +66,35 @@ export default class ApplicationCommand {
                                 }${commandName}.js`
                             )
                         ).default as SubCommand
+
+                        let guildId = interaction.guildId ?? ''
+                        let hasServerOptions =
+                            await checkForServerOptions(guildId)
+
+                        if (!hasServerOptions) {
+                            await interaction.reply({
+                                content:
+                                    'This server has not been set up correctly, please contact an administrator to run the /setup command',
+                                ephemeral: true
+                            })
+                            return
+                        }
+
                         await command.execute(interaction)
                     } catch (error) {
-                        console.error(error)
+                        // console.error(error)
                         await interaction.reply({
-                            content:
-                                'An error occured when attempting to execute that command!',
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setTitle(
+                                        'There was an error while executing this command!'
+                                    )
+                                    .setDescription(
+                                        (error as Error).message ??
+                                            "I couldn't execute that command!"
+                                    )
+                                    .setColor(Colors.Red)
+                            ],
                             ephemeral: true
                         })
                     }
@@ -104,6 +131,7 @@ export default class ApplicationCommand {
                 }
             }
         } else if (options.execute) {
+            // check permissions
             this.execute = options.execute
         } else if (options.autocomplete) {
             this.autocomplete = options.autocomplete

@@ -18,17 +18,46 @@ enum TicketStatus {
   CLOSED
 }
 
+model GuildOptions {
+  id      String @id
+  guildId String @unique
+
+  // Ticket Options
+  ticketCategoryId String
+  ticketLogChannelId  String
+
+  Guild Guild @relation(fields: [guildId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Guild {
+  id   String @id @unique
+  name String
+
+  GuildOptions GuildOptions?
+  members      GuildMember[]
+  tickets      Ticket[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  guildOptionsId String
+}
+
 model GuildMember {
   discordId String @id
   guildId   String
 
   minecraftUUID     String?
   minecraftUsername String?
+  whitelisted       Boolean  @default(false)
+  Tickets           Ticket[]
+  Guild             Guild    @relation(fields: [guildId], references: [id])
 
   lastActive DateTime @default(now())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  Ticket     Ticket[]
 }
 
 model TicketTemplate {
@@ -60,6 +89,7 @@ model Ticket {
   guildMemberDiscordId String
   ticketTemplateId     String?
 
+  Guild    Guild           @relation(fields: [guildId], references: [id])
   creator  GuildMember     @relation(fields: [guildMemberDiscordId], references: [discordId])
   template TicketTemplate? @relation(fields: [ticketTemplateId], references: [id])
   messages TicketMessage[]
